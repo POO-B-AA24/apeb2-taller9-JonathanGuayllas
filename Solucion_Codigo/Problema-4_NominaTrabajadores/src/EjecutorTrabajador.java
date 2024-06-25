@@ -5,15 +5,15 @@ import java.util.List;
 public class EjecutorTrabajador {
 
     public static void main(String[] args) {
-        Jefe jefe = new Jefe("Carlos", "Perez", "Ciudad Alegria", "123298A", 5000);
+        Jefe jefe = new Jefe("Carlos", "Perez", "Lauro Guerrero", "12345678A", 5000);
 
-        FijoMensual fijoMensual = new FijoMensual("Ana", "Lopez", "Luciano Coral", "87654321B", jefe, 3000);
-        Comisionista comisionista = new Comisionista("Luis", "Gomez", "Av. Eloy Alfaro", "23456789C", jefe, 0.1);
-        PorHoras porHoras = new PorHoras("Marta", "Diaz", "Ciudad Victoria", "34567890D", jefe, 15);
+        FijoMensual fijoMensual = new FijoMensual("Ana", "Lopez", "Av. Eloy Alfaro", "87654321B", jefe, 3000);
+        Comisionista comisionista = new Comisionista("Luis", "Gomez", "Luciano Coral", "23456789C", jefe, 0.1);
+        PorHoras porHoras = new PorHoras("Marta", "Diaz", "Argentina", "34567890D", jefe, 15);
 
-        jefe.DarAltaTrabajador(fijoMensual.trabajador);
-        jefe.DarAltaTrabajador(comisionista.trabajador);
-        jefe.DarAltaTrabajador(porHoras.trabajador);
+        jefe.DarAltaTrabajador(fijoMensual);
+        jefe.DarAltaTrabajador(comisionista);
+        jefe.DarAltaTrabajador(porHoras);
 
         jefe.fijarHoras(porHoras, 45);
         jefe.fijarVentas(comisionista, 50000);
@@ -103,69 +103,61 @@ class Trabajador {
             jefe.mostrarDatos();
         }
     }
+
+    public void calcularSalario() {
+        // This method will be overridden in subclasses
+    }
 }
 
-class FijoMensual {
+class FijoMensual extends Trabajador {
 
-    public Trabajador trabajador;
     public double salarioMensual;
 
     public FijoMensual(String nombre, String apellidos, String direccion, String dni, Jefe jefe, double salarioMensual) {
-        this.trabajador = new Trabajador(nombre, apellidos, direccion, dni, jefe);
+        super(nombre, apellidos, direccion, dni, jefe);
         this.salarioMensual = salarioMensual;
     }
 
+    @Override
     public void calcularSalario() {
-        trabajador.salario = this.salarioMensual;
-    }
-
-    public void mostrarDatos() {
-        trabajador.mostrarDatos();
+        this.salario = this.salarioMensual;
     }
 }
 
-class Comisionista {
+class Comisionista extends Trabajador {
 
-    public Trabajador trabajador;
     public double porcentajeComision;
     public double ventasRealizadas;
 
     public Comisionista(String nombre, String apellidos, String direccion, String dni, Jefe jefe, double porcentajeComision) {
-        this.trabajador = new Trabajador(nombre, apellidos, direccion, dni, jefe);
+        super(nombre, apellidos, direccion, dni, jefe);
         this.porcentajeComision = porcentajeComision;
         this.ventasRealizadas = 0;
     }
 
+    @Override
     public void calcularSalario() {
-        trabajador.salario = this.ventasRealizadas * this.porcentajeComision;
-    }
-
-    public void mostrarDatos() {
-        trabajador.mostrarDatos();
+        this.salario = this.ventasRealizadas * this.porcentajeComision;
     }
 }
 
-class PorHoras {
+class PorHoras extends Trabajador {
 
-    public Trabajador trabajador;
     public double precioHora;
     public double horasTrabajadas;
 
     public PorHoras(String nombre, String apellidos, String direccion, String dni, Jefe jefe, double precioHora) {
-        this.trabajador = new Trabajador(nombre, apellidos, direccion, dni, jefe);
+        super(nombre, apellidos, direccion, dni, jefe);
         this.precioHora = precioHora;
         this.horasTrabajadas = 0;
     }
 
+    @Override
     public void calcularSalario() {
         if (horasTrabajadas <= 40) {
-            trabajador.salario = horasTrabajadas * precioHora;
+            this.salario = horasTrabajadas * precioHora;
         } else {
-            trabajador.salario = (40 * precioHora) + ((horasTrabajadas - 40) * (precioHora * 1.5));
+            this.salario = (40 * precioHora) + ((horasTrabajadas - 40) * (precioHora * 1.5));
         }
-    }
-
-    public void mostrarDatos() {
-        trabajador.mostrarDatos();
     }
 }
